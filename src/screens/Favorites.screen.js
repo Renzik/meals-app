@@ -1,20 +1,40 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-const Favorites = () => {
-  return (
-    <View style={styles.screen}>
-      <Text>The Favorites Screen</Text>
-    </View>
+import { MEALS } from '../data/dummy-data';
+import MealList from '../components/MealList';
+import MealItem from '../components/MealItem';
+import CustomHeaderButton from '../components/HeaderButton';
+
+const Favorites = ({ navigation }) => {
+  const dummyMeals = MEALS.filter((meal, id) => id < 2);
+
+  const renderFavoriteMeals = meal => (
+    <MealItem
+      itemData={meal}
+      onSelect={() => {
+        navigation.navigate({
+          routeName: 'MealDetail',
+          params: {
+            mealId: meal.item.id,
+          },
+        });
+      }}
+    />
   );
+
+  return <MealList navigation={navigation} data={dummyMeals} renderItem={renderFavoriteMeals} />;
 };
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+Favorites.navigationOptions = ({ navigation }) => {
+  return {
+    headerTitle: 'Your Favorites',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item title='menu' iconName='menu' onPress={() => navigation.toggleDrawer()} />
+      </HeaderButtons>
+    ),
+  };
+};
 
 export default Favorites;
