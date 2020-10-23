@@ -1,0 +1,8 @@
+NAVIGATION
+
+We usually use navigation.navigate('passing the route' or {routeName: 'passing the route'})
+
+We can also use navigation.push('routeName'). This helps us navigate further in the same screen. Like in Cpanel file directory, same screen but we can travel to different folders and files.
+
+popToTop() method to go all the way to the first item in the stack.
+replace() method to replace the current item at the top of the stack. we can't go back because the screen was replaced not pushed.
