@@ -2,23 +2,22 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
 
 import { CATEGORIES } from '../data/dummy-data';
+import CategoryItem from '../components/CategoryItem';
 
 const Categories = ({ navigation }) => {
   const renderGridItem = itemData => (
-    <TouchableOpacity
-      style={styles.gridItem}
-      onPress={() => {
+    <CategoryItem
+      itemData={itemData.item}
+      onSelect={() => {
         navigation.navigate({
           routeName: 'CategoryMeals',
           params: {
             categoryId: itemData.item.id,
           },
         });
-      }}>
-      <View>
-        <Text>{itemData.item.title}</Text>
-      </View>
-    </TouchableOpacity>
+      }}
+      navigation={navigation}
+    />
   );
 
   return <FlatList numColumns={2} data={CATEGORIES} renderItem={renderGridItem} />;

@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
+import CustomHeaderButton from '../components/HeaderButton';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-const MealDetailScreen = props => {
+import { MEALS } from '../data/dummy-data';
+
+const MealDetailScreen = ({ navigation }) => {
+  const mealId = navigation.getParam('mealId');
+  const selectedMeal = MEALS.find(meal => meal.id === mealId);
+
   return (
     <View style={styles.screen}>
-      <Text>MealDetailScreen</Text>
+      <Text>{selectedMeal.title}</Text>
       <Button
         title='all the way back'
         onPress={() => {
-          props.navigation.replace('Categories');
+          navigation.replace('Categories');
         }}
       />
     </View>
   );
+};
+
+MealDetailScreen.navigationOptions = ({ navigation }) => {
+  const mealId = navigation.getParam('mealId');
+  const selectedMeal = MEALS.find(meal => meal.id === mealId);
+  let favorite = false;
+
+  return {
+    headerTitle: selectedMeal.title,
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Favorite'
+          iconName='bookmark-border'
+          onPress={() => console.log('favorited')}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({
