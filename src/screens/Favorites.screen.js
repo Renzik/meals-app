@@ -31,7 +31,7 @@ Favorites.navigationOptions = ({ navigation }) => {
     headerTitle: 'Your Favorites',
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item title='menu' iconName='menu' onPress={() => navigation.toggleDrawer()} />
+        <Item title='Menu' iconName='menu' onPress={() => navigation.toggleDrawer()} />
       </HeaderButtons>
     ),
   };
