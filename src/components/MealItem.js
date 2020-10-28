@@ -34,21 +34,21 @@ const MealItem = ({ itemData, onSelect }) => {
   return (
     <View style={styles.mealItem}>
       <TouchableComponent onPress={() => onSelect()}>
-        <View>
-          <View style={{ ...styles.mealRow, ...styles.mealHeader }}>
-            <ImageBackground source={{ uri: imageUrl }} style={styles.bgImage}>
-              <View style={styles.titleContainer}>
-                <Text numberOfLines={1} style={styles.title}>
-                  {title}
-                </Text>
-              </View>
-            </ImageBackground>
-          </View>
-          <View style={{ ...styles.mealRow, ...styles.mealDetail }}>
+        {/* <View> */}
+        <View style={{ ...styles.mealRow, ...styles.mealHeader }}>
+          <ImageBackground source={{ uri: imageUrl }} style={styles.bgImage}>
+            <View style={styles.titleContainer}>
+              <Text numberOfLines={1} style={styles.title}>
+                {title}
+              </Text>
+            </View>
+          </ImageBackground>
+          {/* </View> */}
+          {/* <View style={{ ...styles.mealRow, ...styles.mealDetail }}>
             <CustomText>{duration}m</CustomText>
             <CustomText>{complexity.toUpperCase()}</CustomText>
             <CustomText>{affordability.toUpperCase()}</CustomText>
-          </View>
+          </View> */}
         </View>
       </TouchableComponent>
     </View>
@@ -70,14 +70,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   mealHeader: {
-    height: '85%',
+    // height: '85%',
   },
-  mealDetail: {
-    paddingHorizontal: 10,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: '15%',
-  },
+  // mealDetail: {
+  //   paddingHorizontal: 10,
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  //   height: '15%',
+  // },
   titleContainer: {
     backgroundColor: 'rgba(0,0,0,0.5)',
     paddingVertical: 5,
@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
-  mealRow: {
-    flexDirection: 'row',
-  },
+  // mealRow: {
+  //   flexDirection: 'row',
+  // },
 });
 
 export default MealItem;

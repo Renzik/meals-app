@@ -6,3 +6,5 @@ We can also use navigation.push('routeName'). This helps us navigate further in 
 
 popToTop() method to go all the way to the first item in the stack.
 replace() method to replace the current item at the top of the stack. we can't go back because the screen was replaced not pushed.
+
+useCallback() helps you prevent this. By wrapping it around a function declaration and defining the dependencies of the function, it ensures that the function is only re-created if its dependencies changed.

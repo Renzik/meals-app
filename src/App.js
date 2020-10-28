@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, StatusBar, View } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { enableScreens } from 'react-native-screens';
@@ -27,7 +27,12 @@ const App = () => {
       />
     );
 
-  return <MealsNavigator />;
+  return (
+    <>
+      <StatusBar barStyle='dark-content' backgroundColor='white' />
+      <MealsNavigator />
+    </>
+  );
 };
 
 const styles = StyleSheet.create({
