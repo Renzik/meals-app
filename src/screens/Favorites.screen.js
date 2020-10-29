@@ -1,14 +1,14 @@
 import React from 'react';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
 
-import { MEALS } from '../data/dummy-data';
 import MealList from '../components/MealList';
 import MealItem from '../components/MealItem';
 import CustomHeaderButton from '../components/HeaderButton';
 
 const Favorites = ({ navigation }) => {
-  const dummyMeals = MEALS.filter((meal, id) => id < 2);
-
+  const favMeals = useSelector(state => state.meals.favoriteMeals);
+  // console.log(favMeals, 'FAV MEALSSSS');
   const renderFavoriteMeals = meal => (
     <MealItem
       itemData={meal}
@@ -23,7 +23,7 @@ const Favorites = ({ navigation }) => {
     />
   );
 
-  return <MealList navigation={navigation} data={dummyMeals} renderItem={renderFavoriteMeals} />;
+  return <MealList navigation={navigation} data={favMeals} renderItem={renderFavoriteMeals} />;
 };
 
 Favorites.navigationOptions = ({ navigation }) => {

@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  Button,
   StyleSheet,
   Text,
   View,
   ScrollView,
-  Image,
-  SectionList,
+  ImageBackground,
   Platform,
   Dimensions,
 } from 'react-native';
 import CustomHeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { MEALS } from '../data/dummy-data';
 import CustomText from '../components/CustomText';
 import theme from '../../constants/Colors';
+import { toggleFavorite } from '../redux/actions/meals.actions';
 
 // to have: ingredients, steps it takes, Image, duration, affordability, complexity
 
 const MealDetailScreen = ({ navigation }) => {
   const mealId = navigation.getParam('mealId');
-  const { ingredients, steps, imageUrl, duration, affordability, complexity } = MEALS.find(
-    meal => meal.id === mealId
-  );
+  console.log(mealId, 'FUCKING MEAL ID');
+  const allMeals = useSelector(state => state.meals.meals);
+  const {
+    title,
+    ingredients,
+    steps,
+    imageUrl,
+    duration,
+    affordability,
+    complexity,
+  } = allMeals.find(meal => meal.id === mealId);
 
   // duration: 10m | 15m | 20m | 45m | 60m | 240m
   // affordability: affordable | pricey | luxurious
   // complexity: simple | challenging | hard
+
+  const dispatch = useDispatch();
+
+  const toggleFavoriteHandler = () => {
+    dispatch(toggleFavorite(mealId));
+  };
+
+  useEffect(() => {
+    navigation.setParams({ dispatchFavoriteMeal: toggleFavoriteHandler });
+    return () => {
+      navigation;
+    };
+  }, [title]);
 
   let mealRating = () => {
     let durationRate =
@@ -59,8 +79,6 @@ const MealDetailScreen = ({ navigation }) => {
         <View
           style={{
             backgroundColor: affordabilityRate,
-            borderRightWidth: 0.5,
-            borderLeftWidth: 0.5,
             ...styles.mealRatingContainer,
           }}>
           <Text style={styles.mealRatingText}>
@@ -79,9 +97,10 @@ const MealDetailScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.screen}>
       <View style={styles.imageContainer}>
-        <Image style={styles.mealImage} source={{ uri: imageUrl }} />
+        <ImageBackground style={styles.mealImage} source={{ uri: imageUrl }}>
+          {mealRating()}
+        </ImageBackground>
       </View>
-      {mealRating()}
       <View style={styles.itemContainer}>
         <Text style={styles.sectionTitle}>Ingredients</Text>
         <View style={styles.ingredientsInnerContainer}>
@@ -111,21 +130,44 @@ const MealDetailScreen = ({ navigation }) => {
 };
 
 MealDetailScreen.navigationOptions = ({ navigation }) => {
-  const mealId = navigation.getParam('mealId');
-  const selectedMeal = MEALS.find(meal => meal.id === mealId);
-  // let favorite = false;
+  const mealTitle = navigation.getParam('mealTitle');
+  const dispatchFavoriteMeal = navigation.getParam('dispatchFavoriteMeal');
 
-  return {
-    headerTitle: selectedMeal.title,
-    headerRight: () => (
+  let favorite = false;
+
+  let favoriteMeal;
+
+  if (favorite) {
+    favoriteMeal = (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Favorite'
+          iconName='bookmark'
+          onPress={() => {
+            favorite = false;
+            return dispatchFavoriteMeal();
+          }}
+        />
+      </HeaderButtons>
+    );
+  } else {
+    favoriteMeal = (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
           title='Favorite'
           iconName='bookmark-border'
-          onPress={() => console.log('favorited')}
+          onPress={() => {
+            favorite = true;
+            return dispatchFavoriteMeal();
+          }}
         />
       </HeaderButtons>
-    ),
+    );
+  }
+
+  return {
+    headerTitle: mealTitle,
+    headerRight: () => favoriteMeal,
   };
 };
 
@@ -135,26 +177,20 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '95%',
-    height: Dimensions.get('screen').height * 0.25,
+    height: Dimensions.get('screen').height * 0.35,
     borderRadius: 15,
-    borderWidth: 1,
     overflow: 'hidden',
-    borderColor: 'rgba(0,0,0,0.4)',
     marginTop: 10,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0,
   },
   mealImage: {
     width: '100%',
     height: '100%',
+    justifyContent: 'flex-end',
   },
   mealDetails: {
-    width: '95%',
+    width: '100%',
     height: Dimensions.get('screen').height * 0.05,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 25,
-    alignItems: 'center',
   },
   mealRatingText: {
     fontSize: 16,
@@ -162,25 +198,17 @@ const styles = StyleSheet.create({
   },
   mealRatingContainer: {
     flex: 3,
-    height: '100%',
-    borderWidth: 0.5,
-    borderRadius: 10,
-    borderColor: 'rgba(0,0,0,0.4)',
-    borderTopColor: 'transparent',
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
   itemContainer: {
-    width: '80%',
+    width: '90%',
     marginVertical: 20,
     borderColor: Platform.OS === 'android' ? '#764bc0ad' : '#ffb16fad',
-    borderWidth: 1.5,
+    borderWidth: 1,
     padding: 35,
   },
   ingredientsInnerContainer: {
-    // marginVertical: 10,
     width: '100%',
   },
   ingredientsEven: {

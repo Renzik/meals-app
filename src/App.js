@@ -3,6 +3,8 @@ import { StyleSheet, StatusBar, View } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { enableScreens } from 'react-native-screens';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 import MealsNavigator from './navigation/MealsNavigator';
 
@@ -28,10 +30,10 @@ const App = () => {
     );
 
   return (
-    <>
+    <Provider store={store}>
       <StatusBar barStyle='dark-content' backgroundColor='white' />
       <MealsNavigator />
-    </>
+    </Provider>
   );
 };
 

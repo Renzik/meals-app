@@ -2,18 +2,18 @@ export default {
   primary: '#4a148c',
   secondary: '#ff6f00',
   duration: {
-    short: '#46FA15',
-    medium: '#FADA15',
-    long: '#FB0C0C',
+    short: 'rgba(70, 250, 21, 0.5)',
+    medium: 'rgba(250, 218, 21, 0.5)',
+    long: 'rgba(251, 12, 12, 0.5)',
   },
   affordability: {
-    affordable: '#46FA15',
-    pricey: '#FADA15',
-    luxurious: '#FB0C0C',
+    affordable: 'rgba(70, 250, 21, 0.5)',
+    pricey: 'rgba(250, 218, 21, 0.5)',
+    luxurious: 'rgba(251, 12, 12, 0.5)',
   },
   complexity: {
-    simple: '#46FA15',
-    challenging: '#FADA15',
-    hard: '#FB0C0C',
+    simple: 'rgba(70, 250, 21, 0.5)',
+    challenging: 'rgba(250, 218, 21, 0.5)',
+    hard: 'rgba(251, 12, 12, 0.5)',
   },
 };

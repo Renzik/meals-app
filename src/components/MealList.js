@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 
-import MealItem from '../components/MealItem';
+import MealItem from './MealItem';
 
 const MealList = ({ data, navigation }) => {
   const renderMealItem = meal => (
@@ -12,6 +12,7 @@ const MealList = ({ data, navigation }) => {
           routeName: 'MealDetail',
           params: {
             mealId: meal.item.id,
+            mealTitle: meal.item.title,
           },
         });
       }}
