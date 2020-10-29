@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Platform, StyleSheet, Switch, Text, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch } from 'react-redux';
 
 import CustomHeaderButton from '../components/HeaderButton';
 import FilterOption from '../components/FilterOption';
+import { setFilters } from '../redux/actions/meals.actions';
 
 const FiltersScreen = ({ navigation }) => {
   const [isGlutenFree, setIsGlutenFree] = useState(false);
   const [isVegan, setIsVegan] = useState(false);
   const [isVegetarian, setIsVegetarian] = useState(false);
   const [isLactoseFree, setIsLactoseFree] = useState(false);
+
+  const dispatch = useDispatch();
 
   const saveFilters = useCallback(() => {
     const appliedFilters = {
@@ -18,8 +22,9 @@ const FiltersScreen = ({ navigation }) => {
       vegetarian: isVegetarian,
       lactoseFree: isLactoseFree,
     };
-    console.log(appliedFilters);
-  }, [isGlutenFree, isVegetarian, isVegan, isLactoseFree]);
+    dispatch(setFilters(appliedFilters));
+    navigation.popToTop();
+  }, [isGlutenFree, isVegetarian, isVegan, isLactoseFree, dispatch]);
 
   useEffect(() => {
     navigation.setParams({ save: saveFilters });
@@ -40,6 +45,7 @@ const FiltersScreen = ({ navigation }) => {
 };
 
 FiltersScreen.navigationOptions = ({ navigation }) => {
+  const saveFilters = navigation.getParam('save');
   return {
     headerTitle: 'Filters',
     headerLeft: () => (
@@ -49,7 +55,14 @@ FiltersScreen.navigationOptions = ({ navigation }) => {
     ),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item title='Save' iconName='save' onPress={navigation.getParam('save')} />
+        <Item
+          title='Save'
+          iconName='save'
+          onPress={() => {
+            navigation.navigate({ routeName: 'Categories' });
+            return saveFilters();
+          }}
+        />
       </HeaderButtons>
     ),
   };

@@ -133,8 +133,6 @@ MealDetailScreen.navigationOptions = ({ navigation }) => {
   const isFav = navigation.getParam('isFav');
   const dispatchFavoriteMeal = navigation.getParam('dispatchFavoriteMeal');
 
-  console.log(isFav);
-
   return {
     headerTitle: mealTitle,
     headerRight: () => (

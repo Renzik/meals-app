@@ -20,6 +20,25 @@ const mealsReducer = (state = initialState, action) => {
         ? { ...state, favoriteMeals: [...state.favoriteMeals, theMeal] }
         : { ...state, favoriteMeals: updatedFavMeals };
 
+    case actions.SET_FILTERS:
+      // {
+      // isLactoseFree: true
+      // isVegan: false
+      // isVegetarian: false
+      // isGlutenFree: false
+      // }
+
+      const appliedFilters = action.payload;
+      const filteredMeals = state.meals.filter(meal => {
+        if (appliedFilters.glutenFree && !meal.isGlutenFree) return false;
+        if (appliedFilters.vegan && !meal.isVegan) return false;
+        if (appliedFilters.lactoseFree && !meal.isLactoseFree) return false;
+        if (appliedFilters.vegetarian && !meal.isVegetarian) return false;
+
+        return true;
+      });
+      return { ...state, filteredMeals: filteredMeals };
+
     default:
       return state;
   }

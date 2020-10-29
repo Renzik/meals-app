@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
-import CustomText from './CustomText';
 import MealItem from './MealItem';
 
 const MealList = ({ data, navigation }) => {
