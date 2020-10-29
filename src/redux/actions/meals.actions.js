@@ -2,7 +2,7 @@ export const actions = {
   TOGGLE_FAVORITE: 'TOGGLE_FAVORITE',
 };
 
-export const toggleFavorite = id => ({
+export const toggleFavorite = meal => ({
   type: actions.TOGGLE_FAVORITE,
-  payload: id,
+  payload: meal,
 });

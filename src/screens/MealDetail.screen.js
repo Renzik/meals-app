@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,17 +20,13 @@ import { toggleFavorite } from '../redux/actions/meals.actions';
 
 const MealDetailScreen = ({ navigation }) => {
   const mealId = navigation.getParam('mealId');
-  console.log(mealId, 'FUCKING MEAL ID');
+  const currentMealIsFav = useSelector(state =>
+    state.meals.favoriteMeals.some(meal => meal.id === mealId)
+  );
   const allMeals = useSelector(state => state.meals.meals);
-  const {
-    title,
-    ingredients,
-    steps,
-    imageUrl,
-    duration,
-    affordability,
-    complexity,
-  } = allMeals.find(meal => meal.id === mealId);
+  const { ingredients, steps, imageUrl, duration, affordability, complexity } = allMeals.find(
+    meal => meal.id === mealId
+  );
 
   // duration: 10m | 15m | 20m | 45m | 60m | 240m
   // affordability: affordable | pricey | luxurious
@@ -38,16 +34,19 @@ const MealDetailScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const toggleFavoriteHandler = () => {
+  const toggleFavoriteHandler = useCallback(() => {
     dispatch(toggleFavorite(mealId));
-  };
+  }, [dispatch, mealId]);
 
   useEffect(() => {
-    navigation.setParams({ dispatchFavoriteMeal: toggleFavoriteHandler });
-    return () => {
-      navigation;
-    };
-  }, [title]);
+    navigation.setParams({
+      dispatchFavoriteMeal: toggleFavoriteHandler,
+    });
+  }, [toggleFavoriteHandler]);
+
+  useEffect(() => {
+    navigation.setParams({ isFav: currentMealIsFav });
+  }, [currentMealIsFav]);
 
   let mealRating = () => {
     let durationRate =
@@ -131,43 +130,22 @@ const MealDetailScreen = ({ navigation }) => {
 
 MealDetailScreen.navigationOptions = ({ navigation }) => {
   const mealTitle = navigation.getParam('mealTitle');
+  const isFav = navigation.getParam('isFav');
   const dispatchFavoriteMeal = navigation.getParam('dispatchFavoriteMeal');
 
-  let favorite = false;
-
-  let favoriteMeal;
-
-  if (favorite) {
-    favoriteMeal = (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title='Favorite'
-          iconName='bookmark'
-          onPress={() => {
-            favorite = false;
-            return dispatchFavoriteMeal();
-          }}
-        />
-      </HeaderButtons>
-    );
-  } else {
-    favoriteMeal = (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title='Favorite'
-          iconName='bookmark-border'
-          onPress={() => {
-            favorite = true;
-            return dispatchFavoriteMeal();
-          }}
-        />
-      </HeaderButtons>
-    );
-  }
+  console.log(isFav);
 
   return {
     headerTitle: mealTitle,
-    headerRight: () => favoriteMeal,
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title='Favorite'
+          iconName={isFav ? 'bookmark' : 'bookmark-border'}
+          onPress={() => dispatchFavoriteMeal()}
+        />
+      </HeaderButtons>
+    ),
   };
 };
 

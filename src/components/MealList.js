@@ -1,23 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-
+import { StyleSheet, View, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
+import CustomText from './CustomText';
 import MealItem from './MealItem';
 
 const MealList = ({ data, navigation }) => {
-  const renderMealItem = meal => (
-    <MealItem
-      itemData={meal}
-      onSelect={() => {
-        navigation.navigate({
-          routeName: 'MealDetail',
-          params: {
-            mealId: meal.item.id,
-            mealTitle: meal.item.title,
-          },
-        });
-      }}
-    />
-  );
+  const favMeals = useSelector(state => state.meals.favoriteMeals);
+
+  const renderMealItem = mealData => {
+    const isFav = favMeals.some(meal => meal.id === mealData.id);
+
+    return (
+      <MealItem
+        itemData={mealData}
+        onSelect={() => {
+          navigation.navigate({
+            routeName: 'MealDetail',
+            params: {
+              mealId: mealData.item.id,
+              mealTitle: mealData.item.title,
+              isFav: isFav,
+            },
+          });
+        }}
+      />
+    );
+  };
 
   return (
     <View style={styles.list}>
